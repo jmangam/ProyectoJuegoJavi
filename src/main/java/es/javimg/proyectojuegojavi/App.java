@@ -1,6 +1,5 @@
 package es.javimg.proyectojuegojavi;
 
-import java.time.Duration;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -10,14 +9,18 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 
 
 public class App extends Application {
     
-    int imgX = ;
-    int img1X = ;
+    int imgX = 0;
+    int img1X = 998;
     
     //imagen de fondo
     Image img = new Image(getClass().getResourceAsStream("/images/imagentop.jpg"));
@@ -35,11 +38,34 @@ public class App extends Application {
         stage.setTitle("JuegoJavi");
         stage.show();
         
-      
-        
         paneRoot.getChildren().add(imgView);
+        paneRoot.getChildren().add(img1View);
+
+        Rectangle cuerpo = new Rectangle ();
+        cuerpo.setWidth(50);
+        cuerpo.setHeight(33);
+        cuerpo.setX(5);
+        cuerpo.setY(30);
+        cuerpo.setFill(Color.GREEN);
         
-        Timeline animationDesierto = new Timeline(
+        Circle cabeza = new Circle();
+        cabeza.setRadius(25); 
+        cabeza.setCenterX(30);
+        cabeza.setCenterY(30);
+        cabeza.setFill(Color.GREEN);
+        
+        Circle ojo = new Circle();
+        ojo.setRadius(7); 
+        ojo.setCenterX(30);
+        ojo.setCenterY(30);
+        ojo.setFill(Color.BLACK);
+        
+        
+        paneRoot.getChildren().add(cuerpo);
+        paneRoot.getChildren().add(cabeza);
+        paneRoot.getChildren().add(ojo);
+        
+        Timeline animationpaisaje = new Timeline(
             new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
                 //System.out.println(desiertoX);
                 imgView.setX(imgX);
@@ -49,22 +75,18 @@ public class App extends Application {
                 img1View.setX(img1X);
                 img1X -= 5;
                
-                if (imgX < -1377) {
-                imgX = 1350;
+                if (imgX < -990) {
+                imgX = 998;
                 }
                
-                if (img1X < -1377) {
-                img1X = 1350;
+                if (img1X < -990) {
+                img1X = 998;
                 }
-             
-                lineaX -= 5 ;
                
-                root.getChildren().add(grupoLinea1);
-
             })
         );
-        animationDesierto.setCycleCount(Timeline.INDEFINITE);
-        animationDesierto.play();
+        animationpaisaje.setCycleCount(Timeline.INDEFINITE);
+        animationpaisaje.play();
 
         
         
