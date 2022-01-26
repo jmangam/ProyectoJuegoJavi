@@ -23,6 +23,7 @@ public class App extends Application {
     int imgX = 0;
     int img1X = 998;
     int contazulX = 0;
+    int movidrio = 0;
     //imagen de fondo 1
     Image img = new Image(getClass().getResourceAsStream("/images/imagentop.jpg"));
     ImageView imgView = new ImageView(img);
@@ -33,7 +34,8 @@ public class App extends Application {
     Image img2 = new Image(getClass().getResourceAsStream("/images/personaje.gif"));
     ImageView img2View = new ImageView(img2);
     
-    
+    Image imgvidrio = new Image(getClass().getResourceAsStream("/images/botella_vidrio.png"));
+    ImageView imgvidrioView = new ImageView(imgvidrio);
 
     @Override
     public void start(Stage stage) {
@@ -47,10 +49,14 @@ public class App extends Application {
         paneRoot.getChildren().add(imgView);
         paneRoot.getChildren().add(img1View);
         paneRoot.getChildren().add(img2View);
+        paneRoot.getChildren().add(imgvidrioView);
         img2View.setX(10);
         img2View.setY(265);
         img2View.setScaleX(0.25);
         img2View.setScaleY(0.25);
+        imgvidrioView.setY(370);
+        
+        
         
         //dibujo contenedor verde
         Rectangle parteabajo = new Rectangle ();
@@ -133,8 +139,19 @@ public class App extends Application {
 
         //paneRoot.getChildren().add(contamarillo);
         
-
+        Rectangle vidriorec = new Rectangle ();
+        vidriorec.setWidth(50);
+        vidriorec.setHeight(33);
+        vidriorec.setX(5);
+        vidriorec.setY(30);
+        vidriorec.setFill(Color.BLUE);
         
+        Group vidrio = new Group();
+        vidrio.getChildren().add(vidriorec);
+        vidrio.getChildren().addAll(imgvidrioView, vidriorec);
+        paneRoot.getChildren().add(vidrio);
+        
+
         Timeline animationpaisaje = new Timeline(
             new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
 
@@ -152,6 +169,13 @@ public class App extends Application {
                 img1X = 998;
                 }
                 
+                movidrio -= 5;
+                vidrio.setLayoutX(movidrio);
+                //System.out.println(movLinea);
+                if (movidrio < -5) {
+                    movidrio = 1000;
+                    vidrio.setLayoutX(movidrio);
+                }
             })
         );
         animationpaisaje.setCycleCount(Timeline.INDEFINITE);
