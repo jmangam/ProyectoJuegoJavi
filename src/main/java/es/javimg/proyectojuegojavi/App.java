@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -37,6 +38,8 @@ public class App extends Application {
     Image imgvidrio = new Image(getClass().getResourceAsStream("/images/botella_vidrio.png"));
     ImageView imgvidrioView = new ImageView(imgvidrio);
 
+    
+    
     @Override
     public void start(Stage stage) {
         Pane paneRoot = new Pane();  
@@ -140,18 +143,31 @@ public class App extends Application {
         //paneRoot.getChildren().add(contamarillo);
         
         Rectangle vidriorec = new Rectangle ();
-        vidriorec.setWidth(50);
-        vidriorec.setHeight(33);
-        vidriorec.setX(5);
-        vidriorec.setY(30);
+        vidriorec.setWidth(20);
+        vidriorec.setHeight(50);
+        vidriorec.setX(0);
+        vidriorec.setY(382);
         vidriorec.setFill(Color.BLUE);
+        vidriorec.setVisible(false);
+        
+        Rectangle personajerec = new Rectangle ();
+        personajerec.setWidth(46);
+        personajerec.setHeight(53);
+        personajerec.setX(122);
+        personajerec.setY(378);
+        personajerec.setFill(Color.BLUE);
+        personajerec.setVisible(false);
         
         Group vidrio = new Group();
-        vidrio.getChildren().add(vidriorec);
         vidrio.getChildren().addAll(imgvidrioView, vidriorec);
         paneRoot.getChildren().add(vidrio);
         
-
+        Group personaje = new Group();
+        personaje.getChildren().addAll(img2View, personajerec);
+        paneRoot.getChildren().add(personaje);
+                  
+       
+                
         Timeline animationpaisaje = new Timeline(
             new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
 
@@ -176,6 +192,16 @@ public class App extends Application {
                     movidrio = 1000;
                     vidrio.setLayoutX(movidrio);
                 }
+                
+                Shape colision1 = Shape.intersect(vidriorec, personajerec);
+                boolean colisionVacia = colision1.getBoundsInLocal().isEmpty();
+                
+                if(colisionVacia == false) {
+                     movidrio = 1000;
+                    vidrio.setLayoutX(movidrio);
+                }
+                
+
             })
         );
         animationpaisaje.setCycleCount(Timeline.INDEFINITE);
