@@ -9,6 +9,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -25,6 +27,10 @@ public class App extends Application {
     int img1X = 998;
     int contazulX = 0;
     int movidrio = 0;
+    int pospersonaje= 0;
+    int velpersonaje=0;
+    int posX = 0;
+    int posY = 0;
     //imagen de fondo 1
     Image img = new Image(getClass().getResourceAsStream("/images/imagentop.jpg"));
     ImageView imgView = new ImageView(img);
@@ -201,11 +207,30 @@ public class App extends Application {
                     vidrio.setLayoutX(movidrio);
                 }
                 
-
+                personaje.setLayoutX(posX);
+                personaje.setLayoutY(posY);
+                
+                
+                ballCenterX+= ballCurrentSpeedX;
+                scene.setOnKeyPressed((KeyEvent event) -> {
+                switch(event.getCode()) {    
+                    case UP:
+                        velpersonaje = -6;
+                        System.out.println("detecta tecla");
+                    break;
+                }
+                //if(posY >= 300) {
+                  // velpersonaje = 6;
+                //}
+                
+                       
+ 
+           
+            });
             })
         );
-        animationpaisaje.setCycleCount(Timeline.INDEFINITE);
-        animationpaisaje.play();
+            animationpaisaje.setCycleCount(Timeline.INDEFINITE);
+            animationpaisaje.play();
 
         
         
