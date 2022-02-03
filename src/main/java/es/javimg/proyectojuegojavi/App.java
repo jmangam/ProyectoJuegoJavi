@@ -5,17 +5,21 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -31,16 +35,19 @@ public class App extends Application {
     int velpersonaje=0;
     int posX = 0;
     int posY = 0;
+    int moverde = 0;
+    int TEXT_SIZE = 0;
+    
     //imagen de fondo 1
     Image img = new Image(getClass().getResourceAsStream("/images/imagentop.jpg"));
     ImageView imgView = new ImageView(img);
     //imagen de fondo 2
     Image img1 = new Image(getClass().getResourceAsStream("/images/imagentop1.jpg"));
     ImageView img1View = new ImageView(img);
-    //gif del personaje
+    //imagen del personaje
     Image img2 = new Image(getClass().getResourceAsStream("/images/personaje.gif"));
     ImageView img2View = new ImageView(img2);
-    
+    //item botella vidrio
     Image imgvidrio = new Image(getClass().getResourceAsStream("/images/botella_vidrio.png"));
     ImageView imgvidrioView = new ImageView(imgvidrio);
 
@@ -48,13 +55,13 @@ public class App extends Application {
     
     @Override
     public void start(Stage stage) {
-        Pane paneRoot = new Pane();  
+        Pane paneRoot = new Pane();  //creacion de ventana con sus dimensiones y su nombre
         Scene scene = new Scene(paneRoot, 998, 500);
         stage.setScene(scene);
         stage.setTitle("JuegoJavi");
         stage.show();
         
-        //añadimos las 3 imagenes en pantalla
+        //añadimos todas las imagenes en pantalla y le damos las cordenadas necesarias
         paneRoot.getChildren().add(imgView);
         paneRoot.getChildren().add(img1View);
         paneRoot.getChildren().add(img2View);
@@ -64,6 +71,8 @@ public class App extends Application {
         img2View.setScaleX(0.25);
         img2View.setScaleY(0.25);
         imgvidrioView.setY(370);
+        
+        
         
         
         
@@ -87,12 +96,25 @@ public class App extends Application {
         agujero.setCenterY(25);
         agujero.setFill(Color.BLACK);
         
+        Rectangle todoverde = new Rectangle();
+        todoverde.setWidth(50);
+        todoverde.setHeight(60);
+        todoverde.setX(5);
+        todoverde.setY(7);
+        todoverde.setFill(Color.BLUE);
+        todoverde.setVisible(false);
+        
+        
         Group contverde = new Group();
         contverde.getChildren().add(parteabajo);
         contverde.getChildren().add(partearriba);
         contverde.getChildren().add(agujero);
+        contverde.getChildren().add(todoverde);
+        contverde.setLayoutY(370);
+        contverde.setLayoutX(990);
         
-        //paneRoot.getChildren().add(contverde);
+        
+        paneRoot.getChildren().add(contverde);
         
         //dibujo contenedor azul
         Rectangle parteabajo1 = new Rectangle ();
@@ -167,11 +189,25 @@ public class App extends Application {
         Group vidrio = new Group();
         vidrio.getChildren().addAll(imgvidrioView, vidriorec);
         paneRoot.getChildren().add(vidrio);
+        vidrio.setLayoutX(500);
         
         Group personaje = new Group();
         personaje.getChildren().addAll(img2View, personajerec);
         paneRoot.getChildren().add(personaje);
                   
+                
+                    scene.setOnKeyPressed((KeyEvent event) -> {
+                    if (posY == 0) {
+                        switch(event.getCode()) {    
+                        case UP:
+                            velpersonaje = -6;
+                            System.out.println(posY);
+                            System.out.println("detecta tecla");
+                        break;
+                        } 
+                    }
+                    });
+
        
                 
         Timeline animationpaisaje = new Timeline(
@@ -198,7 +234,13 @@ public class App extends Application {
                     movidrio = 1000;
                     vidrio.setLayoutX(movidrio);
                 }
-                
+                 moverde -= 5;
+                contverde.setLayoutX(moverde);
+                //System.out.println(movLinea);
+                if (moverde < -5) {
+                    moverde = 1300;
+                    contverde.setLayoutX(moverde);
+                }
                 Shape colision1 = Shape.intersect(vidriorec, personajerec);
                 boolean colisionVacia = colision1.getBoundsInLocal().isEmpty();
                 
@@ -207,26 +249,27 @@ public class App extends Application {
                     vidrio.setLayoutX(movidrio);
                 }
                 
+                Shape colision2 = Shape.intersect(todoverde, personajerec);
+                boolean colisionVacia1 = colision2.getBoundsInLocal().isEmpty();
+                
+                if(colisionVacia1 == false) {
+                     moverde = 1000;
+                    vidrio.setLayoutX(700);
+                }
+                
                 personaje.setLayoutX(posX);
                 personaje.setLayoutY(posY);
                 
                 
-                ballCenterX+= ballCurrentSpeedX;
-                scene.setOnKeyPressed((KeyEvent event) -> {
-                switch(event.getCode()) {    
-                    case UP:
-                        velpersonaje = -6;
-                        System.out.println("detecta tecla");
-                    break;
+                posY+= velpersonaje;
+                                   
+                if(posY < -120) {
+                  velpersonaje = 6;
                 }
-                //if(posY >= 300) {
-                  // velpersonaje = 6;
-                //}
                 
-                       
- 
-           
-            });
+                if(posY == 0) {
+                   velpersonaje = 0;
+                }
             })
         );
             animationpaisaje.setCycleCount(Timeline.INDEFINITE);
